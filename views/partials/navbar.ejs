@@ -1,0 +1,36 @@
+<% layout('/layouts/boilerplate')%>
+
+<nav class="bg-gradient-to-r from-gray-900 to-gray-800 px-4 py-3">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <!-- Logo -->
+    <a href="#" class="text-white text-2xl font-semibold"><em>Cinema Shelf</em></a>
+
+   
+
+    <!-- Navigation Links -->
+    <ul class="flex space-x-4 items-center">
+      <li><a href="/home" class="text-white hover:text-gray-200">Home</a></li>
+
+      <% if(currentUser){ %>
+        <li><a href="/new" class="text-white hover:text-gray-200">Create New Playlist</a></li>
+      <% } %>
+      <li><a href="#" class="text-white hover:text-gray-200">Contact</a></li>
+      
+      <% if(!currentUser){ %>
+        <li><a href="/login" class="text-white hover:text-gray-200">Login</a></li>
+      <% } else { %>
+        <li class="relative">
+          <button class="text-white hover:text-gray-200">Hello, <%=currentUser.username%></button>
+          <!-- <ul class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-md hidden">
+            <li><a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a></li>
+          </ul> -->
+        </li>
+        <li>
+          <form action="/logout" method="post">
+            <button class="text-white hover:text-gray-200">Logout</button>
+          </form>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

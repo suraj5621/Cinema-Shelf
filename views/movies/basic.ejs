@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Shelf</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+            background: linear-gradient(270deg, #1e3a8a, #1565c0, #48cae4);
+            background-size: 200% 200%;
+            animation: gradientBackground 4s ease infinite;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .animated-gradient:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <header class="bg-gray-800 p-4 shadow-md">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-2xl font-bold">Cinema Shelf</a>
+            <div>
+                <a href="/login" class="text-gray-300 mr-4 hover:text-white transition duration-300">Sign In</a>
+                <a href="/register" class="text-white bg-gray-700 py-2 px-4 rounded hover:bg-gray-600 transition duration-300">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container mx-auto px-6 py-16 text-center">
+        <h1 class="text-5xl font-bold mb-6 text-white">Create and Share Your Movie Playlists</h1>
+        <p class="text-lg mb-12 text-gray-300">Search for movies, create playlists, and share them with your friends. Keep your movie collection organized and discover new favorites.</p>
+        <div class="mb-12">
+            <img src="https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fG1vdmllc3xlbnwwfHwwfHx8MA%3D%3D" alt="Movies" class="mx-auto rounded-lg shadow-lg">
+        </div>
+        <div>
+            <a href="/register" class="animated-gradient text-white py-3 px-5 font-medium rounded-lg text-lg transition duration-300">Get Started</a>
+        </div>
+    </main>
+    <section class="bg-gray-800 py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 text-white">Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div class="bg-gray-700 p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">User Authentication</h3>
+                    <p class="text-gray-300">Sign up or sign in to access your personalized movie playlists.</p>
+                </div>
+                <div class="bg-gray-700 p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Search Movies</h3>
+                    <p class="text-gray-300">Search for movies and view detailed information about them.</p>
+                </div>
+                <div class="bg-gray-700 p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Create Playlists</h3>
+                    <p class="text-gray-300">Create and organize your own movie playlists.</p>
+                </div>
+                <div class="bg-gray-700 p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Public & Private Lists</h3>
+                    <p class="text-gray-300">Choose to make your playlists public or keep them private.</p>
+                </div>
+                <div class="bg-gray-700 p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Share Playlists</h3>
+                    <p class="text-gray-300">Share your playlists with friends via unique links.</p>
+                </div>
+                <div class="bg-gray-700 p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Discover New Movies</h3>
+                    <p class="text-gray-300">Explore new movies and add them to your playlists.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-gray-800 py-8">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>&copy; 2024 Movie Playlist App. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

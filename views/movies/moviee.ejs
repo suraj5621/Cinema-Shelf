@@ -1,0 +1,151 @@
+<% layout('/layouts/boilerplate') %>
+<%- include('../partials/navbar') %>    
+<body class="bg-gradient-to-r from-gray-700 to-gray-800 min-h-screen text-white">
+    <div class="container mx-auto p-4">
+        <h1 class="text-5xl font-extrabold mb-8 text-center text-white">Movie List</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <% data.forEach(movie => { %>
+                <div class="bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden flex flex-col transform transition duration-500 hover:scale-105 hover:shadow-2xl">
+                    <img class="w-full h-64 object-cover transition duration-500 transform hover:scale-110" src="<%= movie.Poster %>" alt="<%= movie.Title %>">
+                    <div class="p-6 flex-grow">
+                        <h2 class="text-2xl font-bold mb-2 text-blue-400 transition duration-500 hover:text-pink-400"><%= movie.Title %></h2>
+                        <p class="text-gray-300 mb-2">Year: <%= movie.Year %></p>
+                        <p class="text-gray-300 mb-4">IMDB ID: <%= movie.imdbID %></p>
+                    </div>
+                    <div class="p-6 pt-0">
+                        <button onclick="openModal('<%= movie.imdbID %>')" class="bg-blue-500 hover:bg-pink-500 text-white font-semibold px-4 py-2 rounded-lg w-full transition duration-300 transform hover:scale-105">Add to Playlist</button>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="playlistModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-700 opacity-75"></div>
+            </div>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">Save video to...</h3>
+                            <div class="mt-2">
+                                <form id="addToPlaylistForm" action="/add" method="post">
+                                    <input type="text" id="imdbID" class="hidden" name="imdbID" value="">
+                                    <input type="text" id="movie_name" class="hidden" name="movie_name" value="<%= movie_name %>">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-700 mb-2">Public Playlists</h4>
+                                        <ul id="publicPlaylists" class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg mb-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <!-- Public playlists will be dynamically inserted here -->
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-700 mb-2">Private Playlists</h4>
+                                        <ul id="privatePlaylists" class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <!-- Private playlists will be dynamically inserted here -->
+                                        </ul>
+                                    </div>
+                                    <button class="mt-4 bg-blue-600 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-lg w-full transition duration-300 transform hover:scale-105">Save</button>
+                                </form> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button onclick="createNewPlaylist()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition duration-300 transform hover:scale-105">Create New Playlist</button>
+                    <button type="button" onclick="closeModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let movie_id;
+
+        function openModal(imdbID) {
+            document.getElementById('playlistModal').classList.remove('hidden');
+            document.getElementById('imdbID').value = imdbID;
+            movie_id = imdbID;
+            fetchPlaylists();
+        }
+
+        function closeModal() {
+            document.getElementById('playlistModal').classList.add('hidden');
+        }
+
+        async function fetchPlaylists() {
+            try {
+                // Fetch public playlists
+                const publicResponse = await fetch('/playlists/public');
+                if (!publicResponse.ok) {
+                    throw new Error('Failed to fetch public playlists');
+                }
+                const publicPlaylists = await publicResponse.json();
+
+                // Fetch private playlists
+                const privateResponse = await fetch('/playlists/private');
+                if                 (!privateResponse.ok) {
+                    throw new Error('Failed to fetch private playlists');
+                }
+                const privatePlaylists = await privateResponse.json();
+
+                // Populate public playlists
+                const publicList = document.getElementById('publicPlaylists');
+                publicList.innerHTML = '';
+                publicPlaylists.forEach(playlist => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('w-full', 'border-b', 'border-gray-200', 'dark:border-gray-600');
+                    listItem.innerHTML = `
+                        <div class="flex items-center ps-3">
+                            <input type="checkbox" value="${playlist.name}" name="playlist" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <label class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${playlist.name}</label>
+                        </div>
+                    `;
+                    publicList.appendChild(listItem);
+                });
+
+                // Populate private playlists
+                const privateList = document.getElementById('privatePlaylists');
+                privateList.innerHTML = '';
+                privatePlaylists.forEach(playlist => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('w-full', 'border-b', 'border-gray-200', 'dark:border-gray-600');
+                    listItem.innerHTML = `
+                        <div class="flex items-center ps-3">
+                            <input type="checkbox" value="${playlist.name}" name="playlist" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <label class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">${playlist.name}</label>
+                        </div>
+                    `;
+                    privateList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching playlists:', error);
+            }
+        }
+
+        async function createNewPlaylist() {
+            let playlistName = prompt("Enter new playlist name:");
+            if (playlistName) {
+                let visibility = confirm("Do you want to make this playlist public? Press OK for Public, Cancel for Private.");
+                let isPublic = visibility ? "public" : "private";
+                
+                const response = await fetch("/create", {
+                    method: "POST",
+                    body: JSON.stringify({ name: playlistName, visibility: isPublic }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                });
+                if (response.ok) {
+                    fetchPlaylists(); // Refresh the playlist list
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,80 @@
+<% layout('/layouts/boilerplate') %>
+<%- include('../partials/navbar') %>    
+
+<div class="bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl font-bold mb-8 text-center text-white">Search Movies</h1>
+        <form action="/movies" method="get" class="flex justify-center">
+            <input type="text" name="movie_name" placeholder="Search Movies..." class="w-72 px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:border-blue-500">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-6 rounded-r-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition duration-300">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-white mb-8">Public Playlists</h1>
+        <% if (publicPlaylists.length === 0) { %>
+            <p class="text-center text-white">There are no public playlists</p>
+        <% } else { %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% publicPlaylists.forEach(playlist => { %>
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300 dark:bg-gray-800 dark:border-gray-700 bg-gradient-to-r from-gray-600 to-gray-800">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-white"><%= playlist.name %></h2>
+                            <% if (playlist.movies.length === 0) { %>
+                                <p class="text-gray-600 text-white">No movies in this playlist</p>
+                            <% } else { %>
+                                <ul class="divide-y divide-gray-200">
+                                    <% playlist.movies.forEach(movie => { %>
+                                        <li class="py-4 flex items-center hover:bg-gray-600 transition duration-300">
+                                            <img src="<%= movie.image %>" alt="<%= movie.title %>" class="w-16 h-24 rounded-lg object-cover mr-4 shadow-md">
+                                            <div>
+                                                <h3 class="text-lg font-medium text-gray-700 text-white"><%= movie.title %></h3>
+                                                <p class="text-sm text-gray-500 text-white"><%= movie.year %></p>
+                                            </div>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<div class="bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-white mb-8">Your Private Playlists</h1>
+        <% if (privatePlaylists.length === 0) { %>
+            <p class="text-center text-white">There are no private playlists</p>
+        <% } else { %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% privatePlaylists.forEach(playlist => { %>
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300 dark:bg-gray-800 dark:border-gray-700  bg-gradient-to-r from-gray-600 to-gray-800">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-white"><%= playlist.name %></h2>
+                            <% if (playlist.movies.length === 0) { %>
+                                <p class="text-gray-600 text-white">No movies in this playlist</p>
+                            <% } else { %>
+                                <ul class="divide-y divide-gray-200">
+                                    <% playlist.movies.forEach(movie => { %>
+                                        <li class="py-4 flex items-center hover:bg-gray-600 transition duration-300">
+                                            <img src="<%= movie.image %>" alt="<%= movie.title %>" class="w-16 h-24 rounded-lg object-cover mr-4 shadow-md">
+                                            <div>
+                                                <h3 class="text-lg font-medium text-gray-700 text-white"><%= movie.title %></h3>
+                                                <p class="text-sm text-gray-500 text-white"><%= movie.year %></p>
+                                            </div>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+</div>

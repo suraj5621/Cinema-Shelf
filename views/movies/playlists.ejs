@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlists</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Playlists</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% playlists.forEach(playlist => { %>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4"><%= playlist.name %></h2>
+                        <ul class="divide-y divide-gray-200">
+                            <% playlist.movies.forEach(movie => { %>
+                                <li class="py-4 flex items-center">
+                                    <img src="<%= movie.image %>" alt="<%= movie.title %>" class="w-16 h-24 rounded-lg object-cover mr-4 shadow-md">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-700"><%= movie.title %></h3>
+                                        <p class="text-sm text-gray-500"><%= movie.year %></p>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</body>
+</html>
